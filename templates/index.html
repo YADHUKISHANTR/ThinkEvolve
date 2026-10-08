@@ -1,0 +1,1143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ThinkEvolve — Evidence-backed idea research</title>
+
+    <style>
+        :root {
+            --bg: #090b12;
+            --surface: rgba(18, 22, 34, 0.82);
+            --surface-2: #111624;
+            --surface-3: #0d111c;
+            --border: rgba(255,255,255,.09);
+            --text: #f7f8ff;
+            --muted: #9aa3b8;
+            --purple: #8b5cf6;
+            --pink: #ec4899;
+            --cyan: #22d3ee;
+            --green: #34d399;
+            --yellow: #fbbf24;
+            --red: #fb7185;
+            --shadow: 0 24px 70px rgba(0,0,0,.28);
+        }
+
+        * { box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+
+        body {
+            margin: 0;
+            font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            background:
+                radial-gradient(circle at 10% 0%, rgba(139,92,246,.20), transparent 28%),
+                radial-gradient(circle at 90% 8%, rgba(34,211,238,.14), transparent 25%),
+                radial-gradient(circle at 50% 60%, rgba(236,72,153,.07), transparent 30%),
+                var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+        }
+
+        body::before {
+            content: "";
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            background-image: radial-gradient(rgba(255,255,255,.08) 1px, transparent 1px);
+            background-size: 28px 28px;
+            opacity: .12;
+            mask-image: linear-gradient(to bottom, black, transparent 75%);
+        }
+
+        a { color: inherit; }
+        button, textarea { font: inherit; }
+
+        .container {
+            width: min(1180px, 92%);
+            margin: 0 auto;
+        }
+
+        /* NAV */
+        .nav-wrap {
+            position: sticky;
+            top: 0;
+            z-index: 50;
+            padding: 14px 0;
+            background: rgba(9,11,18,.72);
+            backdrop-filter: blur(18px);
+            border-bottom: 1px solid rgba(255,255,255,.06);
+        }
+
+        .nav {
+            width: min(1180px, 92%);
+            margin: auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+        }
+
+        .brand {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+            font-weight: 800;
+            letter-spacing: -.02em;
+        }
+
+        .brand-mark {
+            width: 38px;
+            height: 38px;
+            display: grid;
+            place-items: center;
+            border-radius: 12px;
+            background: linear-gradient(135deg, var(--purple), var(--pink));
+            box-shadow: 0 10px 28px rgba(139,92,246,.28);
+            font-size: 19px;
+        }
+
+        .brand-name { font-size: 18px; }
+        .brand-name span { color: #aeb6ca; font-weight: 600; }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .nav-link {
+            text-decoration: none;
+            color: var(--muted);
+            padding: 9px 13px;
+            border-radius: 10px;
+            font-size: 14px;
+            transition: .2s ease;
+        }
+
+        .nav-link:hover { color: var(--text); background: rgba(255,255,255,.06); }
+
+        .home-btn {
+            text-decoration: none;
+            color: #fff;
+            padding: 10px 15px;
+            border-radius: 11px;
+            font-size: 14px;
+            font-weight: 750;
+            background: linear-gradient(135deg, #7c3aed, #db2777);
+            box-shadow: 0 9px 24px rgba(124,58,237,.22);
+            transition: transform .2s ease, box-shadow .2s ease;
+        }
+
+        .home-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 13px 30px rgba(124,58,237,.34);
+        }
+
+        /* HERO */
+        .hero {
+            position: relative;
+            text-align: center;
+            padding: 88px 0 42px;
+        }
+
+        .hero-badge, .section-kicker, .version-label {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            padding: 7px 12px;
+            border: 1px solid rgba(139,92,246,.28);
+            border-radius: 999px;
+            background: rgba(139,92,246,.10);
+            color: #c9b8ff;
+            font-size: 12px;
+            font-weight: 800;
+            letter-spacing: .07em;
+            text-transform: uppercase;
+        }
+
+        .hero h1 {
+            max-width: 850px;
+            margin: 20px auto 14px;
+            font-size: clamp(42px, 7vw, 78px);
+            line-height: .98;
+            letter-spacing: -.055em;
+        }
+
+        .hero h1 .gradient {
+            background: linear-gradient(90deg, #fff, #c4b5fd 42%, #67e8f9 78%, #f9a8d4);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .hero p {
+            max-width: 700px;
+            margin: auto;
+            color: var(--muted);
+            font-size: 17px;
+            line-height: 1.7;
+        }
+
+        /* INPUT */
+        .input-section { margin: 10px 0 75px; }
+
+        .search-panel {
+            position: relative;
+            padding: 9px;
+            border-radius: 25px;
+            background: linear-gradient(135deg, rgba(139,92,246,.50), rgba(34,211,238,.22), rgba(236,72,153,.38));
+            box-shadow: var(--shadow);
+        }
+
+        .search-inner {
+            padding: 22px;
+            border-radius: 18px;
+            background: rgba(10,13,22,.96);
+        }
+
+        .input-topline {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 15px;
+            margin-bottom: 12px;
+        }
+
+        .input-label { font-weight: 800; }
+        .input-hint { color: #737d93; font-size: 12px; }
+
+        textarea {
+            width: 100%;
+            min-height: 130px;
+            padding: 18px;
+            border: 1px solid var(--border);
+            border-radius: 15px;
+            outline: none;
+            resize: vertical;
+            color: var(--text);
+            background: #0b0f19;
+            line-height: 1.6;
+            transition: border-color .2s, box-shadow .2s;
+        }
+
+        textarea:focus {
+            border-color: rgba(139,92,246,.7);
+            box-shadow: 0 0 0 4px rgba(139,92,246,.10);
+        }
+
+        .input-actions {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 15px;
+            margin-top: 14px;
+        }
+
+        .search-note { color: #707a90; font-size: 12px; }
+
+        .primary-btn {
+            border: 0;
+            border-radius: 12px;
+            padding: 13px 20px;
+            color: #fff;
+            font-weight: 800;
+            cursor: pointer;
+            background: linear-gradient(135deg, var(--purple), var(--pink));
+            box-shadow: 0 12px 28px rgba(139,92,246,.24);
+            transition: transform .2s ease, box-shadow .2s ease;
+        }
+
+        .primary-btn:hover { transform: translateY(-2px); box-shadow: 0 16px 32px rgba(139,92,246,.34); }
+
+        /* GENERAL SECTIONS */
+        .results, .evolution, .v2-results, .comparison-section, .evidence { margin-bottom: 82px; }
+        .section-title { margin-bottom: 22px; }
+        .section-title h2 { margin: 8px 0 7px; font-size: clamp(27px, 4vw, 38px); letter-spacing: -.035em; }
+        .section-title p { margin: 0; color: var(--muted); line-height: 1.6; }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0,1fr));
+            gap: 17px;
+        }
+
+        .card, .comparison-card, .version-card, .source {
+            position: relative;
+            overflow: hidden;
+            border: 1px solid var(--border);
+            background: linear-gradient(145deg, rgba(20,25,39,.92), rgba(12,16,27,.92));
+            border-radius: 20px;
+            box-shadow: 0 12px 35px rgba(0,0,0,.12);
+        }
+
+        .card {
+            padding: 24px;
+            transition: transform .2s ease, border-color .2s ease, box-shadow .2s ease;
+        }
+
+        .card::before, .version-card::before, .comparison-card::before {
+            content: "";
+            position: absolute;
+            width: 150px;
+            height: 150px;
+            right: -80px;
+            top: -90px;
+            border-radius: 50%;
+            background: rgba(139,92,246,.12);
+            filter: blur(12px);
+        }
+
+        .card:hover {
+            transform: translateY(-3px);
+            border-color: rgba(139,92,246,.28);
+            box-shadow: 0 18px 42px rgba(0,0,0,.22);
+        }
+
+        .card h3, .comparison-card h3, .evolution-column h3 { margin: 0 0 15px; font-size: 18px; }
+        .card p, .comparison-card p { color: #b8c0d1; line-height: 1.65; }
+        .card ul { list-style: none; padding: 0; margin: 0; }
+
+        .result-card {
+            padding: 14px 0;
+            border-bottom: 1px solid rgba(255,255,255,.07);
+        }
+
+        .result-card:last-child { border-bottom: 0; padding-bottom: 0; }
+        .result-card h3 { margin: 0 0 7px; font-size: 16px; }
+        .result-card p { margin: 0; }
+
+        .finding-evidence {
+            margin-top: 11px;
+            padding: 9px 11px;
+            border-radius: 10px;
+            background: rgba(255,255,255,.035);
+            color: #737e95;
+            font-size: 11px;
+            line-height: 1.5;
+        }
+
+        .finding-evidence span { color: #9da7ba; font-weight: 750; }
+        .finding-evidence a { margin-left: 7px; color: #bba8ff; text-decoration: none; font-weight: 750; }
+        .finding-evidence a:hover { color: #ddd3ff; text-decoration: underline; }
+
+        .competition { grid-column: span 2; }
+
+        .competition-level {
+            display: inline-flex;
+            padding: 8px 13px;
+            margin-bottom: 8px;
+            border-radius: 999px;
+            color: #fff;
+            font-weight: 850;
+            background: linear-gradient(135deg, rgba(236,72,153,.22), rgba(139,92,246,.22));
+            border: 1px solid rgba(236,72,153,.25);
+        }
+
+        /* IMPROVEMENTS */
+        .improvement-list li {
+            padding: 12px 0 12px 30px;
+            color: #c1c8d7;
+            line-height: 1.55;
+            position: relative;
+            border-bottom: 1px solid rgba(255,255,255,.06);
+        }
+        .improvement-list li:last-child { border-bottom: 0; }
+        .improvement-list li::before {
+            content: "✦";
+            position: absolute;
+            left: 3px;
+            color: var(--cyan);
+        }
+
+        /* EVOLUTION */
+        .evolution-header { margin-bottom: 23px; }
+
+        .version-card {
+            padding: 30px;
+            background:
+                radial-gradient(circle at 85% 15%, rgba(34,211,238,.10), transparent 24%),
+                radial-gradient(circle at 10% 80%, rgba(236,72,153,.09), transparent 26%),
+                linear-gradient(145deg, rgba(24,21,43,.95), rgba(12,16,27,.96));
+        }
+
+        .version-label { color: #b9f5ff; border-color: rgba(34,211,238,.25); background: rgba(34,211,238,.08); }
+
+        .version-idea {
+            max-width: 920px;
+            margin: 17px 0 27px;
+            font-size: clamp(22px, 3vw, 30px);
+            line-height: 1.42;
+            letter-spacing: -.025em;
+            font-weight: 750;
+        }
+
+        .evolution-columns { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 16px; }
+
+        .evolution-column {
+            padding: 19px;
+            border: 1px solid rgba(255,255,255,.07);
+            border-radius: 15px;
+            background: rgba(5,8,15,.34);
+        }
+
+        .evolution-column:first-child h3 { color: #c4b5fd; }
+        .evolution-column:last-child h3 { color: #67e8f9; }
+
+        .evolution-item {
+            padding: 12px 0;
+            border-bottom: 1px solid rgba(255,255,255,.06);
+            color: #b9c1d2;
+            line-height: 1.55;
+        }
+        .evolution-item:last-child { border-bottom: 0; }
+
+        .v2-research { margin-top: 22px; }
+
+        /* V2 */
+        .v2-label { color: #b9f5ff; border-color: rgba(34,211,238,.25); background: rgba(34,211,238,.08); }
+        .v2-results .card { border-color: rgba(34,211,238,.10); }
+
+        .v2-results .card li {
+            color: #b9c1d2;
+            line-height: 1.55;
+            padding: 11px 0;
+            border-bottom: 1px solid rgba(255,255,255,.06);
+        }
+        .v2-results .card li:last-child { border-bottom: 0; }
+
+        /* COMPARISON */
+        .comparison-grid { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 17px; }
+
+        .comparison-card {
+            padding: 23px;
+            transition: transform .2s ease;
+        }
+        .comparison-card:hover { transform: translateY(-3px); }
+
+        .comparison-score {
+            display: flex;
+            align-items: baseline;
+            gap: 5px;
+            margin-bottom: 8px;
+            font-size: 42px;
+            font-weight: 900;
+            letter-spacing: -.05em;
+            background: linear-gradient(90deg, #c4b5fd, #67e8f9);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .comparison-score::after { content: ""; }
+        .winner-card { grid-column: span 2; text-align: center; padding: 35px; background: linear-gradient(135deg, rgba(139,92,246,.15), rgba(34,211,238,.08), rgba(236,72,153,.12)); }
+        .winner-label { color: #8490a8; font-size: 11px; letter-spacing: .16em; font-weight: 800; }
+        .winner-card h2 { margin: 8px 0 12px; font-size: 30px; }
+        .winner-card p { max-width: 720px; margin: auto; }
+        .key-change { grid-column: span 2; }
+
+        /* EVIDENCE */
+        .evidence-header-row { display:flex; align-items:end; justify-content:space-between; gap:20px; margin-bottom:20px; }
+        .source-list { display: grid; gap: 11px; }
+        .source { padding: 0; }
+        .source summary {
+            list-style: none;
+            cursor: pointer;
+            padding: 17px 19px;
+            display: flex;
+            align-items: center;
+            gap: 13px;
+        }
+        .source summary::-webkit-details-marker { display:none; }
+        .source-number {
+            width: 30px;
+            height: 30px;
+            flex: 0 0 30px;
+            display: grid;
+            place-items: center;
+            border-radius: 9px;
+            background: rgba(139,92,246,.13);
+            color: #c8baff;
+            font-size: 12px;
+            font-weight: 850;
+        }
+        .source-title { font-weight: 800; line-height: 1.4; }
+        .source-chevron { margin-left:auto; color:#6e7890; transition:transform .2s; }
+        .source[open] .source-chevron { transform: rotate(180deg); }
+        .source-body { padding: 0 19px 18px 62px; }
+        .source-query { color:#717c92; font-size:12px; margin-bottom:9px; }
+        .source-snippet { color:#aeb7c9; line-height:1.55; font-size:14px; margin-bottom:11px; }
+        .source-body a { color:#bdaeff; text-decoration:none; font-size:13px; font-weight:750; }
+        .source-body a:hover { text-decoration:underline; }
+
+        /* FOOTER */
+        footer { padding: 45px 0 65px; color: #626c80; text-align:center; font-size:13px; }
+
+        .back-top {
+            position: fixed;
+            right: 22px;
+            bottom: 22px;
+            z-index: 40;
+            width: 42px;
+            height: 42px;
+            border: 1px solid rgba(255,255,255,.1);
+            border-radius: 12px;
+            color: #fff;
+            background: rgba(17,22,36,.85);
+            backdrop-filter: blur(10px);
+            cursor:pointer;
+            opacity:0;
+            pointer-events:none;
+            transform:translateY(8px);
+            transition:.2s;
+        }
+        .back-top.visible { opacity:1; pointer-events:auto; transform:translateY(0); }
+
+        @media (max-width: 760px) {
+            .nav-links .nav-link { display:none; }
+            .hero { padding-top: 65px; }
+            .input-actions { align-items: stretch; flex-direction: column; }
+            .primary-btn { width:100%; }
+            .grid, .evolution-columns, .comparison-grid { grid-template-columns:1fr; }
+            .competition, .winner-card, .key-change { grid-column:span 1; }
+            .search-inner, .version-card { padding:20px; }
+            .source-body { padding-left:19px; }
+        }
+
+        /* The loading bar stuff */
+        #loadingOverlay {
+                display: none;
+                position: fixed;
+                inset: 0;
+                z-index: 9999;
+                background: rgba(247, 244, 238, 0.96);
+                align-items: center;
+                justify-content: center;
+            }
+
+            .loading-box {
+                width: min(500px, 90%);
+                text-align: center;
+                padding: 35px;
+                background: #FFFFFF;
+                border-radius: 20px;
+                box-shadow: 0 20px 60px rgba(45, 42, 38, 0.15);
+            }
+
+            .loading-title {
+                font-size: 24px;
+                font-weight: 700;
+                color: #2D2A26;
+                margin-bottom: 10px;
+            }
+
+            .loading-status {
+                color: #75716B;
+                margin-bottom: 22px;
+            }
+
+            .progress-track {
+                width: 100%;
+                height: 12px;
+                background: #e6dac874;
+                border-radius: 20px;
+                overflow: hidden;
+            }
+
+            .progress-bar {
+                width: 5%;
+                height: 100%;
+                background: #C68B75;
+                border-radius: 20px;
+                transition: width 0.5s ease;
+            }
+            .progress-bar.loading-animation {
+                        width: 40% !important;
+                        animation: loadingMove 1.5s ease-in-out infinite;
+                    }
+
+                    @keyframes loadingMove {
+                        0% {
+                            transform: translateX(-100%);
+                        }
+
+                        50% {
+                            transform: translateX(100%);
+                        }
+
+                        100% {
+                            transform: translateX(250%);
+                        }
+                    }
+
+            .progress-percent {
+                margin-top: 10px;
+                font-weight: 600;
+                color: #2D2A26;
+            }
+            
+    </style>
+</head>
+
+<body id="top">
+
+<header class="nav-wrap">
+    <nav class="nav">
+        <a class="brand" href="/" aria-label="ThinkEvolve home">
+            <span class="brand-mark">⌕</span>
+            <span class="brand-name">Think<span>Evolve</span></span>
+        </a>
+
+        <div class="nav-links">
+            {% if analysis and "error" not in analysis %}
+                <a class="nav-link" href="#research">Research</a>
+                {% if improved_idea %}<a class="nav-link" href="#evolution">V2</a>{% endif %}
+                {% if comparison %}<a class="nav-link" href="#comparison">Compare</a>{% endif %}
+            {% endif %}
+            <a class="home-btn" href="/">⌂ Home</a>
+        </div>
+    </nav>
+</header>
+
+<div class="container">
+
+    <section class="hero">
+        <div class="hero-badge">✦ Evidence-powered idea research</div>
+        <h1>Turn an idea into a <span class="gradient">better idea.</span></h1>
+        <p>Research the market, discover existing solutions, find gaps, and evolve your idea using real web evidence.</p>
+    </section>
+
+    <section class="input-section" id="search">
+        <div class="search-panel">
+            <div class="search-inner">
+                <form method="POST">
+                    <div class="input-topline">
+                        <div class="input-label">What are you building?</div>
+                        <div class="input-hint">Be specific — ThinkEvolve will do the research.</div>
+                    </div>
+
+                    <textarea name="idea" placeholder="Example: A platform that helps college students find verified commuters travelling along the same route." required>{{ idea }}</textarea>
+
+                    <input type="hidden" name="action" value="research">
+
+                    <div class="input-actions">
+                        <div class="search-note">3 targeted web searches · AI analysis · evidence-backed suggestions</div>
+                        <button class="primary-btn" type="submit">Research My Idea →</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    {% if analysis and "error" not in analysis %}
+
+    <section class="results" id="research">
+        <div class="section-title">
+            <div class="section-kicker">01 · Research</div>
+            <h2>Here's what the web says.</h2>
+            <p>ThinkEvolve turned targeted searches into a structured view of the market around your idea.</p>
+        </div>
+
+        <div class="grid">
+            <div class="card">
+                <h3>🔎 Existing Solutions</h3>
+                <ul>
+                    {% for solution in analysis.existing_solutions %}
+                    <li class="result-card">
+                        <h3>{{ solution.name }}</h3>
+                        <p>{{ solution.description }}</p>
+                        {% if solution.source_id %}
+                        <div class="finding-evidence">
+                            <span>Evidence · Source #{{ solution.source_id }}</span>
+                            {% for source in sources %}
+                                {% if source.source_id == solution.source_id %}
+                                    <a href="{{ source.link }}" target="_blank" rel="noopener noreferrer">View source →</a>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                        {% endif %}
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+
+            <div class="card">
+                <h3>🧩 Common Approaches</h3>
+                <ul>
+                    {% for approach in analysis.common_approaches %}
+                    <li class="result-card">
+                        <p>{{ approach.text }}</p>
+                        {% if approach.source_id %}
+                        <div class="finding-evidence">
+                            <span>Evidence · Source #{{ approach.source_id }}</span>
+                            {% for source in sources %}
+                                {% if source.source_id == approach.source_id %}
+                                    <a href="{{ source.link }}" target="_blank" rel="noopener noreferrer">View source →</a>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                        {% endif %}
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+
+            <div class="card">
+                <h3>⚠️ User Problems</h3>
+                <ul>
+                    {% for problem in analysis.user_problems %}
+                    <li class="result-card">
+                        <p>{{ problem.text }}</p>
+                        {% if problem.source_id %}
+                        <div class="finding-evidence">
+                            <span>Evidence · Source #{{ problem.source_id }}</span>
+                            {% for source in sources %}
+                                {% if source.source_id == problem.source_id %}
+                                    <a href="{{ source.link }}" target="_blank" rel="noopener noreferrer">View source →</a>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                        {% endif %}
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+
+            <div class="card">
+                <h3>💡 Gaps & Opportunities</h3>
+                <ul>
+                    {% for gap in analysis.gaps_opportunities %}
+                    <li class="result-card">
+                        <p>{{ gap.text }}</p>
+                        {% if gap.source_id %}
+                        <div class="finding-evidence">
+                            <span>Evidence · Source #{{ gap.source_id }}</span>
+                            {% for source in sources %}
+                                {% if source.source_id == gap.source_id %}
+                                    <a href="{{ source.link }}" target="_blank" rel="noopener noreferrer">View source →</a>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                        {% endif %}
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+
+            <div class="card competition">
+                <h3>📊 Competition</h3>
+                <div class="competition-level">{{ analysis.competition.level }}</div>
+                <p>{{ analysis.competition.summary }}</p>
+                {% if analysis.competition.source_id %}
+                <div class="finding-evidence">
+                    <span>Evidence · Source #{{ analysis.competition.source_id }}</span>
+                    {% for source in sources %}
+                        {% if source.source_id == analysis.competition.source_id %}
+                            <a href="{{ source.link }}" target="_blank" rel="noopener noreferrer">View source →</a>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+                {% endif %}
+            </div>
+
+            <div class="card competition">
+                <h3>🚀 How You Could Improve Your Idea</h3>
+                <ul class="improvement-list">
+                    {% for improvement in analysis.idea_improvements %}
+                    <li>{{ improvement }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    {% if improved_idea %}
+    <section class="evolution" id="evolution">
+        <div class="evolution-header">
+            <div class="section-kicker">02 · Idea Evolution</div>
+            <div class="section-title">
+                <h2>Your idea, evolved.</h2>
+                <p>ThinkEvolve used the research findings to create a more differentiated version of your idea.</p>
+            </div>
+        </div>
+
+        <div class="version-card">
+            <div class="version-label">✦ Version 2</div>
+            <div class="version-idea">{{ improved_idea.version_2 }}</div>
+
+            <div class="evolution-columns">
+                <div class="evolution-column">
+                    <h3>What Changed</h3>
+                    {% for change in improved_idea.changes %}
+                    <div class="evolution-item"><strong>{{ loop.index }}.</strong> {{ change }}</div>
+                    {% endfor %}
+                </div>
+
+                <div class="evolution-column">
+                    <h3>Why It's Better</h3>
+                    {% for reason in improved_idea.why_better %}
+                    <div class="evolution-item"><strong>{{ loop.index }}.</strong> {{ reason }}</div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <div class="v2-research">
+                <form method="POST">
+                    <input type="hidden" name="action" value="research_v2">
+                    <input type="hidden" name="original_idea" value="{{ idea }}">
+                    <input type="hidden" name="version2" value="{{ improved_idea.version_2 }}">
+                    <input type="hidden" name="original_analysis" value='{{ analysis | tojson | e }}'>
+                    <input type="hidden" name="original_sources" value='{{ sources | tojson | e }}'>
+                    <button class="primary-btn" type="submit">Research Version 2 →</button>
+                </form>
+            </div>
+        </div>
+    </section>
+    {% endif %}
+
+    {% if v2_analysis and "error" not in v2_analysis %}
+    <section class="v2-results" id="v2-research">
+        <div class="section-title">
+            <div class="section-kicker">03 · Fresh Research</div>
+            <h2>How Version 2 stands in the real world.</h2>
+            <p>Fresh web evidence shows what changed — and what still needs work.</p>
+        </div>
+
+        <div class="grid">
+            <div class="card">
+                <h3>🔎 Existing Solutions</h3>
+                <ul>
+                    {% for solution in v2_analysis.existing_solutions %}
+                    <li>
+                        <strong>{{ solution.name }}</strong> — {{ solution.description }}
+                        {% if solution.source_id %}
+                        <div class="finding-evidence">
+                            <span>Evidence · Source #{{ solution.source_id }}</span>
+                            {% for source in v2_sources %}
+                                {% if source.source_id == solution.source_id %}
+                                    <a href="{{ source.link }}" target="_blank" rel="noopener noreferrer">View source →</a>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                        {% endif %}
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+
+            <div class="card">
+                <h3>🧩 Common Approaches</h3>
+                <ul>
+                    {% for approach in v2_analysis.common_approaches %}
+                    <li>
+                        {{ approach.text }}
+                        {% if approach.source_id %}
+                        <div class="finding-evidence">
+                            <span>Evidence · Source #{{ approach.source_id }}</span>
+                            {% for source in v2_sources %}
+                                {% if source.source_id == approach.source_id %}
+                                    <a href="{{ source.link }}" target="_blank" rel="noopener noreferrer">View source →</a>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                        {% endif %}
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+
+            <div class="card">
+                <h3>⚠️ User Problems</h3>
+                <ul>
+                    {% for problem in v2_analysis.user_problems %}
+                    <li>
+                        {{ problem.text }}
+                        {% if problem.source_id %}
+                        <div class="finding-evidence">
+                            <span>Evidence · Source #{{ problem.source_id }}</span>
+                            {% for source in v2_sources %}
+                                {% if source.source_id == problem.source_id %}
+                                    <a href="{{ source.link }}" target="_blank" rel="noopener noreferrer">View source →</a>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                        {% endif %}
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+
+            <div class="card">
+                <h3>💡 Gaps & Opportunities</h3>
+                <ul>
+                    {% for gap in v2_analysis.gaps_opportunities %}
+                    <li>
+                        {{ gap.text }}
+                        {% if gap.source_id %}
+                        <div class="finding-evidence">
+                            <span>Evidence · Source #{{ gap.source_id }}</span>
+                            {% for source in v2_sources %}
+                                {% if source.source_id == gap.source_id %}
+                                    <a href="{{ source.link }}" target="_blank" rel="noopener noreferrer">View source →</a>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                        {% endif %}
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+
+            <div class="card competition">
+                <h3>📊 Competition</h3>
+                <div class="competition-level">{{ v2_analysis.competition.level }}</div>
+                <p>{{ v2_analysis.competition.summary }}</p>
+                {% if v2_analysis.competition.source_id %}
+                <div class="finding-evidence">
+                    <span>Evidence · Source #{{ v2_analysis.competition.source_id }}</span>
+                    {% for source in v2_sources %}
+                        {% if source.source_id == v2_analysis.competition.source_id %}
+                            <a href="{{ source.link }}" target="_blank" rel="noopener noreferrer">View source →</a>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+                {% endif %}
+            </div>
+
+            <div class="card competition">
+                <h3>🚀 Further Improvements</h3>
+                <ul class="improvement-list">
+                    {% for improvement in v2_analysis.idea_improvements %}
+                    <li>{{ improvement }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </section>
+    {% endif %}
+
+    {% if comparison %}
+    <section class="comparison-section" id="comparison">
+        <div class="section-title">
+            <div class="section-kicker">04 · Compare</div>
+            <h2>Version 1 vs Version 2</h2>
+            <p>See how your idea changed after researching the market.</p>
+        </div>
+
+        <div class="comparison-grid">
+            <div class="comparison-card">
+                <h3>✨ Differentiation</h3>
+                <div class="comparison-score">{{ comparison.differentiation.score }}<small>/10</small></div>
+                <p>{{ comparison.differentiation.summary }}</p>
+            </div>
+
+            <div class="comparison-card">
+                <h3>🛡️ Competitive Position</h3>
+                <div class="comparison-score">{{ comparison.competition.score }}<small>/10</small></div>
+                <p>{{ comparison.competition.summary }}</p>
+            </div>
+
+            <div class="comparison-card">
+                <h3>🌱 Opportunity</h3>
+                <div class="comparison-score">{{ comparison.opportunity.score }}<small>/10</small></div>
+                <p>{{ comparison.opportunity.summary }}</p>
+            </div>
+
+            <div class="comparison-card">
+                <h3>🧱 Practicality</h3>
+                <div class="comparison-score">{{ comparison.practicality.score }}<small>/10</small></div>
+                <p>{{ comparison.practicality.summary }}</p>
+            </div>
+
+            <div class="comparison-card winner-card">
+                <div class="winner-label">STRONGER VERSION</div>
+                <h2>{{ comparison.overall.winner }}</h2>
+                <p>{{ comparison.overall.summary }}</p>
+            </div>
+
+            <div class="comparison-card key-change">
+                <h3>🎯 Most Important Change</h3>
+                <p>{{ comparison.key_change }}</p>
+            </div>
+        </div>
+    </section>
+    {% endif %}
+
+    {% if v2_sources %}
+    <section class="evidence">
+        <div class="evidence-header-row">
+            <div class="section-title" style="margin-bottom:0;">
+                <div class="section-kicker">05 · Evidence</div>
+                <h2>Version 2 Research Evidence</h2>
+                <p>Fresh web sources used to analyze Version 2.</p>
+            </div>
+        </div>
+
+        <div class="source-list">
+            {% for source in v2_sources %}
+            <details class="source">
+                <summary>
+                    <span class="source-number">{{ loop.index }}</span>
+                    <span class="source-title">{{ source.title }}</span>
+                    <span class="source-chevron">⌄</span>
+                </summary>
+                <div class="source-body">
+                    <div class="source-query">Search: {{ source.query }}</div>
+                    <div class="source-snippet">{{ source.snippet }}</div>
+                    <a href="{{ source.link }}" target="_blank" rel="noopener noreferrer">Open source →</a>
+                </div>
+            </details>
+            {% endfor %}
+        </div>
+    </section>
+    {% endif %}
+
+    {% if sources %}
+    <section class="evidence">
+        <div class="evidence-header-row">
+            <div class="section-title" style="margin-bottom:0;">
+                <div class="section-kicker">Research Sources</div>
+                <h2>Research Evidence</h2>
+                <p>Web sources used to produce the analysis.</p>
+            </div>
+        </div>
+
+        <div class="source-list">
+            {% for source in sources %}
+            <details class="source">
+                <summary>
+                    <span class="source-number">{{ loop.index }}</span>
+                    <span class="source-title">{{ source.title }}</span>
+                    <span class="source-chevron">⌄</span>
+                </summary>
+                <div class="source-body">
+                    <div class="source-query">Search: {{ source.query }}</div>
+                    <div class="source-snippet">{{ source.snippet }}</div>
+                    <a href="{{ source.link }}" target="_blank" rel="noopener noreferrer">Open source →</a>
+                </div>
+            </details>
+            {% endfor %}
+        </div>
+    </section>
+    {% endif %}
+
+    {% endif %}
+
+                    <!-- Loading overlay -->
+        <div id="loadingOverlay">
+            <div class="loading-box">
+                <div class="loading-title" id="loadingTitle">
+                    Researching your idea...
+                </div>
+
+                <div class="loading-status" id="loadingStatus">
+                    Understanding your idea
+                </div>
+
+                <div class="progress-track">
+                    <div class="progress-bar" id="progressBar"></div>
+                </div>
+
+                <div class="progress-percent" id="progressPercent">0%</div>
+            </div>
+        </div>
+
+</div>
+
+<footer>
+    ThinkEvolve · Evidence-backed idea research
+</footer>
+
+<button class="back-top" id="backTop" aria-label="Back to top">↑</button>
+
+<script>
+    const backTop = document.getElementById("backTop");
+
+    window.addEventListener("scroll", () => {
+        backTop.classList.toggle("visible", window.scrollY > 500);
+    });
+
+    backTop.addEventListener("click", () => {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+    });
+</script>
+
+
+           <script>
+document.addEventListener("DOMContentLoaded", function () {
+
+    const forms = document.querySelectorAll("form");
+
+    forms.forEach(function (form) {
+
+        form.addEventListener("submit", function () {
+
+            const actionInput = form.querySelector('input[name="action"]');
+
+            if (!actionInput) return;
+
+            const action = actionInput.value;
+
+            if (action !== "research" && action !== "research_v2") {
+                return;
+            }
+
+            const overlay = document.getElementById("loadingOverlay");
+            const bar = document.getElementById("progressBar");
+            const percent = document.getElementById("progressPercent");
+            const status = document.getElementById("loadingStatus");
+            const title = document.getElementById("loadingTitle");
+
+            // V1 / V2 title
+            if (action === "research_v2") {
+                title.textContent = "Researching Version 2...";
+            } else {
+                title.textContent = "Researching your idea...";
+            }
+
+            overlay.style.display = "flex";
+
+            // Start the progress animation
+            bar.classList.add("loading-animation");
+
+            percent.textContent = "";
+            status.textContent = "Researching...";
+
+        });
+
+    });
+
+
+    // After Flask finishes and the new page loads
+    window.addEventListener("load", function () {
+
+        // Look for the actual results area
+        const resultsSection =
+            document.querySelector(".results") ||
+            document.querySelector("#results") ||
+            document.querySelector(".research-results");
+
+        if (resultsSection) {
+
+            setTimeout(function () {
+
+                const y =
+                    resultsSection.getBoundingClientRect().top +
+                    window.pageYOffset -
+                    80;
+
+                window.scrollTo({
+                    top: y,
+                    behavior: "smooth"
+                });
+
+            }, 500);
+        }
+
+    });
+
+});
+</script>
+
+</body>
+</html>
